@@ -7,7 +7,6 @@ import com.elereman.webserver.util.PageNotFound;
 import com.elereman.webserver.util.PropertiesHolder;
 
 import java.io.*;
-import java.util.logging.Logger;
 
 /**
  * Created by Elereman on 21.07.2017.

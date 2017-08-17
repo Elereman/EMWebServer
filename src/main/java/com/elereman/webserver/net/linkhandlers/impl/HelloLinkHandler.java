@@ -23,10 +23,8 @@ public class HelloLinkHandler implements LinkHandler{
             out.write(response);
             return 200;
         } catch (IOException e) {
-            e.printStackTrace();
             return 500;
         } catch (Exception e) {
-            e.printStackTrace();
             return 500;
         }
     }
