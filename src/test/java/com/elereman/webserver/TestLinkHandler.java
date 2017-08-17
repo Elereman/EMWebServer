@@ -60,7 +60,6 @@ public class TestLinkHandler {
     @Test
     public void testHandleLinkWithNPException() throws Exception{
         Request request = new Request("HEAD", "null", "http/1.1", null);
-        linkHandler.handleLink(request);
         assertEquals(500, linkHandler.handleLink(request));
     }
 
