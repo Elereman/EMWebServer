@@ -39,7 +39,7 @@ public class FileDataSource implements DataSource {
 
     private void readProperties() {
         properties = new HashMap<>();
-        try (Scanner scanner = new Scanner(file)) {
+        try (Scanner scanner = new Scanner(file, "UTF8")) {
             while (scanner.hasNextLine()) {
                 String fileString = scanner.nextLine();
                 properties.put(parseName(fileString), parseVolume(fileString));

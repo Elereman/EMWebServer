@@ -25,7 +25,7 @@ public class GetRequestHandler implements RequestHandler {
     }
 
     @Override
-    public int handleRequest(Request request) throws Exception {
+    public int handleRequest(Request request) throws IOException {
         DataOutputStream out = request.getOutputStream();
         String fileName = request.getFile();
         String mime = fileName.substring(fileName.indexOf('.') + 1);
@@ -42,37 +42,38 @@ public class GetRequestHandler implements RequestHandler {
                 return 200;
             }
         } catch (FileNotFoundException e) {
-            byte[] response404 = PageNotFound.generateHTML(filepath + fileName).getBytes();
+            byte[] response404 = PageNotFound.generateHTML(filepath + fileName).getBytes("UTF8");
             respondHeader("404", "html", response404.length, out);
             out.write(response404);
             return 404;
         }
     }
 
-    private void sendContentOfFile(DataOutputStream out, String file, String mime, String filepath) throws Exception {
-        InputStream is = new FileInputStream(filepath + file);
+    private void sendContentOfFile(DataOutputStream out, String file, String mime, String filepath) throws IOException {
+        File inputFile = new File(filepath + file);
+        InputStream is = new FileInputStream(inputFile);
 
         try {
-            // Open file
-            byte[] fileBytes = new byte[is.available()];
-            long bytesCount = is.read(fileBytes);
+            byte[] fileBytes = new byte[2048];
 
             // Send header
-            respondHeader("200", mime, bytesCount, out);
-
-            // Write content of file
-            out.write(fileBytes);
+            respondHeader("200", mime, file.length(), out);
+            while (is.read(fileBytes) != -1) {
+                // Write content of file
+                out.write(fileBytes);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            respondHeader("500", mime, 0, out);
         } finally {
             is.close();
         }
     }
 
-    private void sendContentOfFolder(DataOutputStream out, String file, String filepath) throws Exception {
+    private void sendContentOfFolder(DataOutputStream out, String file, String filepath) throws IOException {
         FolderView folderView = FolderView.getInstance();
         try {
-            byte[] fileBytes = folderView.getFolderContext(filepath + file).getBytes();
+            byte[] fileBytes = folderView.getFolderContext(filepath + file).getBytes("UTF8");
             // Send header
             respondHeader("200", "html", fileBytes.length, out);
 

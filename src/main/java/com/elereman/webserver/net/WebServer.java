@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class WebServer implements Runnable {
     private static PropertiesHolder propertiesHolder;
@@ -24,10 +26,12 @@ public final class WebServer implements Runnable {
     private static Thread instance = new Thread(new WebServer());
     private static List<RequestHandler> requestHandlers = new ArrayList<>();
     private static List<LinkHandler> linkHandlers = new ArrayList<>();
+    private static Logger log;
 
     public static void main(String argv[]) throws Exception {
         propertiesHolder = PropertiesHolder.getInstance();
         port = propertiesHolder.getPort();
+        log = propertiesHolder.getLogger();
         startServer();
     }
 
@@ -68,27 +72,27 @@ public final class WebServer implements Runnable {
             }
             executor.shutdown();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.log(Level.SEVERE, "Exception: ", e);
             Thread.currentThread().interrupt();
             executor.shutdown();
             cos.interrupt();
         }
     }
-}
 
-class ConsoleRunnable implements Runnable {
-    Console console;
-    Scanner in;
+    private class ConsoleRunnable implements Runnable {
+        Console console;
+        Scanner in;
 
-    public ConsoleRunnable(Console console, InputStream in) {
-        this.console = console;
-        this.in = new Scanner(in);
-    }
+        public ConsoleRunnable(Console console, InputStream in) {
+            this.console = console;
+            this.in = new Scanner(in, "UTF8");
+        }
 
-    @Override
-    public void run() {
-        while (true) {
-            console.doCommand(in.nextLine(), System.out);
+        @Override
+        public void run() {
+            while (true) {
+                console.doCommand(in.nextLine(), System.out);
+            }
         }
     }
 }

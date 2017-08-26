@@ -18,12 +18,10 @@ public class HelloLinkHandler implements LinkHandler{
     @Override
     public int handleLink(Request request) {
         try (OutputStream out = request.getOutputStream()){
-            byte[] response = "Hello world!".getBytes();
+            byte[] response = "Hello world!".getBytes("UTF8");
             respondHeader("200", "html", response.length, request.getOutputStream());
             out.write(response);
             return 200;
-        } catch (IOException e) {
-            return 500;
         } catch (Exception e) {
             return 500;
         }

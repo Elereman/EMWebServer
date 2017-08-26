@@ -4,6 +4,7 @@ import com.elereman.webserver.net.Request;
 import com.elereman.webserver.net.requesthandlers.api.RequestHandler;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Elereman on 25.07.2017.
@@ -15,7 +16,7 @@ public class HeadRequestHandler implements RequestHandler {
     }
 
     @Override
-    public int handleRequest(Request request) throws Exception {
+    public int handleRequest(Request request) throws IOException {
         try {
             File file = getFile(request.getFile());
             String mime = getMime(file.getName());

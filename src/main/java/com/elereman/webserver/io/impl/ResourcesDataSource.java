@@ -17,7 +17,7 @@ public class ResourcesDataSource implements DataSource {
         if (name.equals("")) {
             throw new RuntimeException("File name can't be empty!");
         } else {
-            scanner = new Scanner(ResourcesDataSource.class.getClassLoader().getResourceAsStream(name));
+            scanner = new Scanner(ResourcesDataSource.class.getClassLoader().getResourceAsStream(name),"UTF8");
         }
     }
 

@@ -42,12 +42,11 @@ public class WorkerRunnable implements Runnable {
         this.out = new DataOutputStream(this.socket.getOutputStream());
         this.requestHandlers = requestHandlers;
         this.linkHandlers = linkHandlers;
-
-        this.inString = this.in.readLine();
     }
 
     public void run() {
         try {
+            this.inString = this.in.readLine();
             respondContent(this.inString, this.out);
 
             this.out.flush();

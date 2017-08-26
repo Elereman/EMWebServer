@@ -3,12 +3,13 @@ package com.elereman.webserver.net;
 import com.elereman.webserver.util.PropertiesHolder;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Created by Elereman on 05.08.2017.
  */
 public interface Handler {
-    default void respondHeader(String code, String mime, long length, DataOutputStream out) throws Exception {
+    default void respondHeader(String code, String mime, long length, DataOutputStream out) throws IOException {
         PropertiesHolder propertiesHolder = PropertiesHolder.getInstance();
         if(!propertiesHolder.getMimeMap().containsKey(mime)) {
             mime = "application/" + mime;
